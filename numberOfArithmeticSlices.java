@@ -3,6 +3,7 @@ import org.junit.Assert;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,41 +20,30 @@ import static org.junit.Assert.assertEquals;
 
  */
 public class numberOfArithmeticSlices {
-
-    public class Tree {
-        int value;
-        ArrayList<Tree> branches;
-
-        public Tree(int val) {
-            this.value = val;
-            this.branches = new ArrayList<>();
+    int numValidSubseqs = 0;
+    public void helper(List<Integer> subseq, int[] A, int start) {
+        if (start == A.length) {
+            if (subseq.size() < 3) {
+                return;
+            }
+            int diff = subseq.get(1) - subseq.get(0);
+            for (int i = 1; i < subseq.size() - 1; i++) {
+                if (subseq.get(i + 1) - subseq.get(i) != diff) {
+                    return;
+                }
+            }
+            numValidSubseqs += 1;
+            return;
         }
-
-        public Tree(int val, ArrayList<Tree> b) {
-            this.value = val;
-            this.branches = b;
-        }
-
-        public boolean isLeaf() {
-            return this.branches.isEmpty();
-        }
-
-        public void addBranch(Tree toAdd) {
-            this.branches.add(toAdd);
-        }
-
-        public void setValue(int val) {
-            this.value = val;
-        }
+        helper(subseq, A, start + 1);
+        subseq.add(0, A[start]);
+        helper(subseq, A, start + 1);
     }
 
-    public int solution(int[] nums) {
-        Tree solutionTree = new Tree();
-        for (int start = 0; start < nums.length - 2; start++) {
-            for (int subseq = start + 1; subseq < nums.length; subseq++) {
-
-            }
-        }
+    public int solution(int[] A) {
+        List<Integer> subseq = new ArrayList<>();
+        helper(subseq, A, 0);
+        return numValidSubseqs;
     }
 
 
@@ -61,6 +51,6 @@ public class numberOfArithmeticSlices {
     @Test
     public void test() {
         assertEquals(7, solution(new int[] {2, 4, 6, 8, 10}));
-        assertEquals(16, )
+        assertEquals(16, solution(new int[] {5, 5, 5, 5, 5}));
     }
 }
