@@ -35,7 +35,8 @@ public class maxLengthConcatString {
 //        return maxUniqueLetters;
 //    }
 
-    public int maxLength(List<String> arr) {
+    /** Working maxLength */
+    public int maxLength1(List<String> arr) {
         List<String> uniqueStrings = new ArrayList<>();
         uniqueStrings.add("");
         for (String s : arr) {
@@ -53,6 +54,25 @@ public class maxLengthConcatString {
             retLength = Math.max(s.length(), retLength);
         }
         return retLength;
+    }
+
+    public int retMax = -1;
+
+    /** Recursive maxLength test */
+    public int maxLength(List<String> arr) {
+        retMax = 0;
+        helper(arr, "", 0);
+        return retMax;
+    }
+
+    public void helper(List<String> arr, String s, int index) {
+        if (index == arr.size()) {
+            if (isUnique(s)) retMax = Math.max(retMax, s.length()) ;
+            return;
+        }
+        helper(arr, s, index + 1);
+        s += arr.get(index);
+        helper(arr, s, index + 1);
     }
 
     public boolean isUnique(String s) {
